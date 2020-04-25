@@ -3,20 +3,20 @@
 import javafx.application.Application;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class Tutorials extends Application {
@@ -35,60 +35,192 @@ public class Tutorials extends Application {
 
 	}
 	
+	
 	@Override
 	public void start(Stage arg0) throws Exception{
-		window =arg0;
-		window.setTitle("Main Menu");
+		window = arg0;
+		window.setTitle("Reserve Flights");
 		
-		//Create two buttons ojects 
-		Button login = new Button("Login");
-		Button register = new Button("Register");
-		Button recoverPassword = new Button("Forgot Password?");
-		Label blank = new Label("");
-		//set button color
-		login.setStyle("-fx-background-color: linear-gradient(to right, #808080,#404040);"
-				+ "-fx-font-size: 20pt;"
-				+ "-fx-text-fill: #CC6600;");
-		register.setStyle("-fx-background-color: linear-gradient(to right, #808080,#404040);"
-				+ "-fx-font-size: 20pt;"
-				+ "-fx-text-fill: #CC6600;");
-		recoverPassword.setStyle("-fx-background-color: linear-gradient(to left, #990000,#CC6600);"
-				+ "-fx-font-size: 8pt;"
-				+ "-fx-text-fill: #000000;");
-		blank.setStyle("-fx-font-size: 4pt;");
+		//Creating gridpane 
+		GridPane registrationGrid = new GridPane();
+		registrationGrid.setPadding(new Insets(10,10,10,10));
+		registrationGrid.setVgap(8);
+		registrationGrid.setHgap(10);
 		
-		//creating menu bar
-		MenuBar menu = new MenuBar();
-		Menu home = new Menu("Home");
-		home.getItems().add(new MenuItem("Go Home"));
-		menu.getMenus().add(home);
-		menu.setStyle("-fx-background-color: #994C00;");
+		//create Buttons 
+		Button backButton = new Button ("Back");
+		Button reserveButton = new Button ("Reserve");
+		GridPane.setConstraints(backButton,0,10);
+		GridPane.setConstraints(reserveButton,2,10);	
 		
-		//adding action to buttons
-		login.setOnAction(e-> loginPage());
-		register.setOnAction(e->registrationPage());
+		//Create labels
+		Label fromCityLabel= new Label("Flying From: ");
+		GridPane.setConstraints(fromCityLabel,0,0);
+		Label toCityLabel= new Label("Flying to: ");
+		GridPane.setConstraints(toCityLabel,2,0);
+		Label dateFromLabel= new Label("Trip starts on: ");
+		GridPane.setConstraints(dateFromLabel,0,3);
+		Label dateBackLabel= new Label("Trip ends on: ");
+		GridPane.setConstraints(dateBackLabel,2,3);
+		Label passengerNumberLabel= new Label("Number of Passengers: ");
+		GridPane.setConstraints(passengerNumberLabel,0,6);
+		Label timeLabel= new Label("Time preferrence: ");
+		GridPane.setConstraints(timeLabel,2,6);
+		Label errorPassenger = new Label ("Enter valid number of passengers");
+		Label errorDate = new Label ("Enter valid dates");
+		
+		//create textfields and others 
+		TextField fromCityTextfield = new TextField();
+		fromCityTextfield.setPromptText("Enter Departing city");
+		GridPane.setConstraints(fromCityTextfield,0,1);
+		TextField toCityTextfield = new TextField();
+		toCityTextfield.setPromptText("Enter Destination city");
+		GridPane.setConstraints(toCityTextfield,2,1);
+		DatePicker dateFromTextfield= new DatePicker();
+		GridPane.setConstraints(dateFromTextfield,0,4);
+		DatePicker dateBackTextfield= new DatePicker();
+		GridPane.setConstraints(dateBackTextfield,2,4);
+		TextField passengerNumberTextfield = new TextField();
+		passengerNumberTextfield.setPromptText("Number of Passengers");
+		GridPane.setConstraints(passengerNumberTextfield,0,7);
 		
 		
-		//Create vbox for layout type
-		VBox pane = new VBox(20);
-		pane.setPadding(new Insets(10,10,10,10));
-		//customize the vbox 
-		pane.setAlignment(Pos.CENTER);
-		pane.getChildren().addAll(login,register,blank,recoverPassword);
-		pane.setStyle("-fx-background-color: #0080FF");
+		//creating a dropdown for time picker 
+		ChoiceBox <String> timepicker = new ChoiceBox<>();
+		timepicker.getItems().addAll("None","4:00","8:00","12:00","16:00 (4:00 PM)","20:00 (8:00 PM)");
+		timepicker.setValue("None");
+		GridPane.setConstraints(timepicker,2,7);
 		
-		//create border pane
-		BorderPane mainMenuBorderPane = new BorderPane();
-		mainMenuBorderPane.setTop(menu);
-		mainMenuBorderPane.setCenter(pane);
+		registrationGrid.getChildren().addAll(fromCityLabel,toCityLabel,dateFromLabel,
+												dateBackLabel,passengerNumberLabel,timeLabel,
+												fromCityTextfield,toCityTextfield,dateFromTextfield,
+												dateBackTextfield,passengerNumberTextfield,timepicker,
+												backButton,reserveButton);
 		
-		//create new scene with vbox
-		scene= new Scene(mainMenuBorderPane,500,500);
+		reserveButton.setOnAction(e -> {
+			try {
+				Integer.parseInt(passengerNumberTextfield.getText());
+				registrationGrid.getChildren().remove(errorPassenger);
+				
+			}catch(Exception ex) {
+				errorPassenger.setStyle("-fx-font-size: 5pt;"+
+										"-fx-text-fill: red;");
+				GridPane.setConstraints(errorPassenger,0,8);
+				registrationGrid.getChildren().add(errorPassenger);
+			}
+			try {
+				if ((dateFromTextfield.getValue()).compareTo(dateBackTextfield.getValue()) >0) {
+					int a = 11/0;
+				}
+				registrationGrid.getChildren().remove(errorDate);
+			}
+			catch(Exception ex) {
+				errorDate.setStyle("-fx-font-size: 5pt;"+
+								"-fx-text-fill: red;");
+				GridPane.setConstraints(errorDate,0,5);
+				registrationGrid.getChildren().add(errorDate);
+			}
+		});
+		
+		backButton.setOnAction(e->mainMenu());
+		
+		Scene scene = new Scene (registrationGrid,400,400);
 		window.setScene(scene);
 		window.show();
-
-		}
+		
+	}
 	
+	private void reservationPage() {
+		//window = arg0;
+		window.setTitle("Reserve Flights");
+		
+		//Creating gridpane 
+		GridPane registrationGrid = new GridPane();
+		registrationGrid.setPadding(new Insets(10,10,10,10));
+		registrationGrid.setVgap(8);
+		registrationGrid.setHgap(10);
+		
+		//create Buttons 
+		Button backButton = new Button ("Back");
+		Button reserveButton = new Button ("Reserve");
+		GridPane.setConstraints(backButton,0,10);
+		GridPane.setConstraints(reserveButton,2,10);	
+		
+		//Create labels
+		Label fromCityLabel= new Label("Flying From: ");
+		GridPane.setConstraints(fromCityLabel,0,0);
+		Label toCityLabel= new Label("Flying to: ");
+		GridPane.setConstraints(toCityLabel,2,0);
+		Label dateFromLabel= new Label("Trip starts on: ");
+		GridPane.setConstraints(dateFromLabel,0,3);
+		Label dateBackLabel= new Label("Trip ends on: ");
+		GridPane.setConstraints(dateBackLabel,2,3);
+		Label passengerNumberLabel= new Label("Number of Passengers: ");
+		GridPane.setConstraints(passengerNumberLabel,0,6);
+		Label timeLabel= new Label("Time preferrence: ");
+		GridPane.setConstraints(timeLabel,2,6);
+		Label errorPassenger = new Label ("Enter valid number of passengers");
+		Label errorDate = new Label ("Enter valid dates");
+		
+		//create textfields and others 
+		TextField fromCityTextfield = new TextField();
+		fromCityTextfield.setPromptText("Enter Departing city");
+		GridPane.setConstraints(fromCityTextfield,0,1);
+		TextField toCityTextfield = new TextField();
+		toCityTextfield.setPromptText("Enter Destination city");
+		GridPane.setConstraints(toCityTextfield,2,1);
+		DatePicker dateFromTextfield= new DatePicker();
+		GridPane.setConstraints(dateFromTextfield,0,4);
+		DatePicker dateBackTextfield= new DatePicker();
+		GridPane.setConstraints(dateBackTextfield,2,4);
+		TextField passengerNumberTextfield = new TextField();
+		passengerNumberTextfield.setPromptText("Number of Passengers");
+		GridPane.setConstraints(passengerNumberTextfield,0,7);
+		
+		
+		//creating a dropdown for time picker 
+		ChoiceBox <String> timepicker = new ChoiceBox<>();
+		timepicker.getItems().addAll("None","4:00","8:00","12:00","16:00 (4:00 PM)","20:00 (8:00 PM)");
+		timepicker.setValue("None");
+		GridPane.setConstraints(timepicker,2,7);
+		
+		registrationGrid.getChildren().addAll(fromCityLabel,toCityLabel,dateFromLabel,
+												dateBackLabel,passengerNumberLabel,timeLabel,
+												fromCityTextfield,toCityTextfield,dateFromTextfield,
+												dateBackTextfield,passengerNumberTextfield,timepicker,
+												backButton,reserveButton);
+		
+		reserveButton.setOnAction(e -> {
+			try {
+				Integer.parseInt(passengerNumberTextfield.getText());
+				registrationGrid.getChildren().remove(errorPassenger);
+				
+			}catch(Exception ex) {
+				errorPassenger.setStyle("-fx-font-size: 5pt;"+
+										"-fx-text-fill: red;");
+				GridPane.setConstraints(errorPassenger,0,8);
+				registrationGrid.getChildren().add(errorPassenger);
+			}
+			try {
+				if ((dateFromTextfield.getValue()).compareTo(dateBackTextfield.getValue()) >0) {
+					int a = 11/0;
+				}
+				registrationGrid.getChildren().remove(errorDate);
+			}
+			catch(Exception ex) {
+				errorDate.setStyle("-fx-font-size: 5pt;"+
+								"-fx-text-fill: red;");
+				GridPane.setConstraints(errorDate,0,5);
+				registrationGrid.getChildren().add(errorDate);
+			}
+		});
+		
+		backButton.setOnAction(e->mainMenu());
+		
+		Scene scene = new Scene (registrationGrid,400,400);
+		window.setScene(scene);
+		window.show();
+	}
 	private void registrationPage() {
 		//window = arg0;
 		window.setTitle("Registration Page");
@@ -138,7 +270,7 @@ public class Tutorials extends Application {
 		//setting action to buttons
 		backButton.setOnAction(e-> {
 			try {
-				start(window);
+				mainMenu();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -204,7 +336,7 @@ public class Tutorials extends Application {
 		//adding action to button
 		backButton.setOnAction(e -> {
 			try {
-				start(window);
+				mainMenu();
 			}
 			catch(Exception ex) {
 				System.out.println("Error going back");
@@ -235,7 +367,9 @@ public class Tutorials extends Application {
 		
 		//Create two buttons ojects 
 		Button login = new Button("Login");
+		login.setOnAction(e -> loginPage());
 		Button register = new Button("Register");
+		register.setOnAction(e -> registrationPage());
 		Button recoverPassword = new Button("Forgot Password?");
 		Label blank = new Label("");
 		//set button color
