@@ -276,6 +276,8 @@ public class Tutorials extends Application {
 		window.show();
 	}
 	
+	
+	/*
 	private void videos() {
 		window.setTitle("Title here");
 		button = new Button("Submit");
@@ -301,6 +303,7 @@ public class Tutorials extends Application {
 		window.setScene(scene);
 		window.show();
 	}
+
 	
 	
 	private void video30() { //using binding with FX, enter some input, and some other piece of code changes 
@@ -1000,9 +1003,9 @@ public class Tutorials extends Application {
 			System.out.println("Good Job");
 		}	
 	}
-*/	
+
 	
-/*video 8 making complex windows, with button at top and side
+video 8 making complex windows, with button at top and side
  	public void start(Stage arg0) throws Exception{
 		window = arg0;
 		window.setTitle("Title here");
@@ -1031,9 +1034,9 @@ public class Tutorials extends Application {
 	}
 
 
- */
+
 	
-/*Video 9
+Video 9
  public void start(Stage arg0) throws Exception{
 		window = arg0;
 		window.setTitle("Title here");
@@ -1071,6 +1074,7 @@ public class Tutorials extends Application {
 		window.show();
 		
 	}
- */
+ 
+	*/
 
 }
