@@ -1,5 +1,11 @@
 
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import javafx.application.Application;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -10,6 +16,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.*;
@@ -18,6 +25,8 @@ import javafx.scene.control.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class Tutorials extends Application {
 	Stage window;
@@ -30,23 +39,54 @@ public class Tutorials extends Application {
 	TextField nameInput, priceInput, quantityInput;
 	BorderPane layout;
 	
-	public static void main(String[] args) {
-		launch(args);
+	 public static void main(String[] args) throws SQLException, ClassNotFoundException {
+		 
+		 launch(args);
+		 	/*
+		 	// Load the JDBC driver
+		    //Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Driver loaded");
 
-	}
-	
-	
+		    // Establish a connection
+		    Connection connection = DriverManager.getConnection
+		      ("jdbc:mysql://34.66.230.235/cis-3730:us-central1:cis-3300","KushP19","myPass123");
+		    System.out.println("Database connected");
+
+		    // Create a statement
+		    Statement statement = connection.createStatement();
+
+		    // Execute a statement
+		    ResultSet resultSet = statement.executeQuery
+		      ("select firstName, mi, lastName from Student"); //where lastName "
+		      //  + " = 'Smith'");
+
+		    // Iterate through the result and print the student names
+		    while (resultSet.next())
+		      System.out.println(resultSet.getString(1) + "\t" +
+		        resultSet.getString(2) + "\t" + resultSet.getString(3));
+		    // Close the connection
+		    connection.close();*/
+		  }
 	@Override
 	public void start(Stage arg0) throws Exception{
 		window = arg0;
 		window.setTitle("Reserve Flights");
+		
+		//setting background image
+		Image reserveImage = new Image("jetblue1.0.jpg");
+		ImageView reserveImageView = new ImageView(reserveImage);
+		reserveImageView.setPreserveRatio(true);
+		reserveImageView.setFitWidth(100);
+		Group root = new Group();
+		root.getChildren().addAll(reserveImageView);
+		
 		
 		//Creating gridpane 
 		GridPane registrationGrid = new GridPane();
 		registrationGrid.setPadding(new Insets(10,10,10,10));
 		registrationGrid.setVgap(8);
 		registrationGrid.setHgap(10);
-		
+	
 		//create Buttons 
 		Button backButton = new Button ("Back");
 		Button reserveButton = new Button ("Reserve");
@@ -95,7 +135,7 @@ public class Tutorials extends Application {
 												dateBackLabel,passengerNumberLabel,timeLabel,
 												fromCityTextfield,toCityTextfield,dateFromTextfield,
 												dateBackTextfield,passengerNumberTextfield,timepicker,
-												backButton,reserveButton);
+												backButton,reserveButton,root);
 		
 		reserveButton.setOnAction(e -> {
 			try {
