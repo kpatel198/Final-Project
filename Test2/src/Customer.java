@@ -29,16 +29,16 @@ public class Customer{
 
 	//Inserts statements into customer table **NEEDS TO COME FROM TEXT FIELD
 	public static void post() throws Exception{
-		final String VAR1 = firstNameTextField;
-		final String VAR2 = secondNameTextField;
-		final String VAR3 = addressTextField1;
-		final String VAR4 = addressTextField2;
-		final String VAR5 = cityTextField;
-		final String VAR6 = stateTextField;
-		final String VAR7 = zipcodeTextField;
-		final String VAR8 = usernameTextField;
-		final String VAR9 = passwordTextField;
-		final String VAR10 = ssnTextField;
+		final String VAR1 = firstName.getText();
+		final String VAR2 = secondName.getText();
+		final String VAR3 = address.getText();
+		final String VAR4 = address.getText();
+		final String VAR5 = city.getText();
+		final String VAR6 = state.getText();
+		final String VAR7 = zipcode.getText();
+		final String VAR8 = username.getText();
+		final String VAR9 = password.getText();
+		final String VAR10 = ssn.getText();
 
 		try {
 			Connection con = getConnection();
@@ -51,11 +51,11 @@ public class Customer{
 
 	}
 
-	//Retrieves security question and answer for password recovery. Stores in array **NEEDS TO CROSS REF USERNAME
+	//Retrieves security question and answer for password recovery. Stores in array
 	public static ArrayList<String> getSecurityQandA() throws Exception {
 		try {
 			Connection con = getConnection();
-			PreparedStatement recover = con.prepareStatement("SELECT securityqu, securityans FROM customer");
+			PreparedStatement recover = con.prepareStatement("SELECT securityqu, securityans FROM customer WHERE username = username.getText()");
 
 			ResultSet result = recover.executeQuery();
 
