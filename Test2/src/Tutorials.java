@@ -79,6 +79,13 @@ public class Tutorials extends Application {
 		window = arg0;
 		window.setTitle("Reserve Flights");
 
+		// splash screen	
+		Parent root = FXMLLoader.load(getClass().getResource("splash.fxml"));
+		Scene scene = new Scene(root);
+		primaryStage.setScene(scene);
+			primaryStage.initStyle(StageStyle.UNDECORATED);
+			primaryStage.show();
+		
 		//setting background image
 		Image reserveImage = new Image("jetblue1.0.jpg");
 		ImageView reserveImageView = new ImageView(reserveImage);
