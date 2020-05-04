@@ -1,11 +1,9 @@
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.PreparedStatement;
+import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.beans.property.IntegerProperty;
@@ -29,62 +27,47 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class Tutorials extends Application {
+public class javaAppCIS extends Application {
 	Stage window;
 	Scene scene;
 	Button button;
 	ComboBox<String> combobox;
 	ListView<String> listview;
 	TreeView <String> tree;
-	TableView<Products> table;
+//TableView<Products> table;
 	TextField nameInput, priceInput, quantityInput;
 	BorderPane layout;
+	
+	public static void main(String[] args) throws SQLException, ClassNotFoundException {
+		    launch(args);
+			// Load the JDBC driver
+		  	//  Class.forName("com.mysql.jdbc.Driver");
+		    System.out.println("Driver loaded");
 
-	 public static void main(String[] args) throws SQLException, ClassNotFoundException {
+		    // Establish a connection
+		    Connection connection = DriverManager.getConnection
+		      ("jdbc:mysql://35.196.232.95:3306/test","root","");
+		    System.out.println("Database connected");
 
-		 launch(args);
-		 createCustTable();
+		    // Create a statement
+		    Statement statement = connection.createStatement();
 
+		    // Execute a statement
+		    ResultSet resultSet = statement.executeQuery
+		      ("select firstName, mi, lastName from Student"); //where lastName "
+		      //  + " = 'Smith'");
+
+		    // Iterate through the result and print the student names
+		    while (resultSet.next())
+		      System.out.println(resultSet.getString(1) + "\t" +
+		        resultSet.getString(2) + "\t" + resultSet.getString(3));
+		    // Close the connection
+		    connection.close();
 		  }
-//create customer table in database
-			public static void createCustTable()throws Exception{
-				try{
-					Connection con = getConnection();
-					PreparedStatement create  = con.prepareStatement("CREATE TABLE IF NOT EXISTS customer(id int NOT NULL AUTO_INCREMENT, first varchar(255), last varchar(255), address varchar(255),zip int(5), state varchar(255), username varchar(255), password varchar(255), ssn varchar(11), securityqu varchar(255), securityan varchar(255) ,PRIMARY KEY(id))");
-					create.executeUpdate();
-
-				}catch(Exception e) {System.out.println(e);}
-				finally {System.out.println("Function complete.");}
-			}
-
-//connect to database
-			public static Connection getConnection () throws Exception {
-	try {
-		String driver = "com.mysql.jdbc.Driver";
-		String url = "jdbc:mysql://35.196.232.95:3306/test";
-		String username = "root";
-		String password = "";
-		Class.forName(driver);
-
-		Connection conn = DriverManager.getConnection(url, username,password);
-		System.out.println("Connected");
-		return conn;
-	} catch(Exception e) {System.out.println(e);}
-
-	return null;
-}
-
 	@Override
 	public void start(Stage arg0) throws Exception{
 		window = arg0;
 		window.setTitle("Reserve Flights");
-
-		// splash screen	
-		Parent root = FXMLLoader.load(getClass().getResource("splash.fxml"));
-		Scene scene = new Scene(root);
-		primaryStage.setScene(scene);
-			primaryStage.initStyle(StageStyle.UNDECORATED);
-			primaryStage.show();
 		
 		//setting background image
 		Image reserveImage = new Image("jetblue1.0.jpg");
@@ -93,20 +76,20 @@ public class Tutorials extends Application {
 		reserveImageView.setFitWidth(100);
 		Group root = new Group();
 		root.getChildren().addAll(reserveImageView);
-
-
-		//Creating gridpane
+		
+		
+		//Creating gridpane 
 		GridPane registrationGrid = new GridPane();
 		registrationGrid.setPadding(new Insets(10,10,10,10));
 		registrationGrid.setVgap(8);
 		registrationGrid.setHgap(10);
-
-		//create Buttons
+	
+		//create Buttons 
 		Button backButton = new Button ("Back");
 		Button reserveButton = new Button ("Reserve");
 		GridPane.setConstraints(backButton,0,10);
-		GridPane.setConstraints(reserveButton,2,10);
-
+		GridPane.setConstraints(reserveButton,2,10);	
+		
 		//Create labels
 		Label fromCityLabel= new Label("Flying From: ");
 		GridPane.setConstraints(fromCityLabel,0,0);
@@ -122,8 +105,8 @@ public class Tutorials extends Application {
 		GridPane.setConstraints(timeLabel,2,6);
 		Label errorPassenger = new Label ("Enter valid number of passengers");
 		Label errorDate = new Label ("Enter valid dates");
-
-		//create textfields and others
+		
+		//create textfields and others 
 		TextField fromCityTextfield = new TextField();
 		fromCityTextfield.setPromptText("Enter Departing city");
 		GridPane.setConstraints(fromCityTextfield,0,1);
@@ -137,25 +120,25 @@ public class Tutorials extends Application {
 		TextField passengerNumberTextfield = new TextField();
 		passengerNumberTextfield.setPromptText("Number of Passengers");
 		GridPane.setConstraints(passengerNumberTextfield,0,7);
-
-
-		//creating a dropdown for time picker
+		
+		
+		//creating a dropdown for time picker 
 		ChoiceBox <String> timepicker = new ChoiceBox<>();
 		timepicker.getItems().addAll("None","4:00","8:00","12:00","16:00 (4:00 PM)","20:00 (8:00 PM)");
 		timepicker.setValue("None");
 		GridPane.setConstraints(timepicker,2,7);
-
+		
 		registrationGrid.getChildren().addAll(fromCityLabel,toCityLabel,dateFromLabel,
 												dateBackLabel,passengerNumberLabel,timeLabel,
 												fromCityTextfield,toCityTextfield,dateFromTextfield,
 												dateBackTextfield,passengerNumberTextfield,timepicker,
 												backButton,reserveButton);
-
+				
 		reserveButton.setOnAction(e -> {
 			try {
 				Integer.parseInt(passengerNumberTextfield.getText());
 				registrationGrid.getChildren().remove(errorPassenger);
-
+				
 			}catch(Exception ex) {
 				errorPassenger.setStyle("-fx-font-size: 5pt;"+
 										"-fx-text-fill: red;");
@@ -175,31 +158,31 @@ public class Tutorials extends Application {
 				registrationGrid.getChildren().add(errorDate);
 			}
 		});
-
+		
 		backButton.setOnAction(e->mainMenu());
-
+		
 		Scene scene = new Scene (registrationGrid,400,400);
 		window.setScene(scene);
 		window.show();
-
+		
 	}
-
+	
 	private void reservationPage() {
 		//window = arg0;
 		window.setTitle("Reserve Flights");
-
-		//Creating gridpane
+		
+		//Creating gridpane 
 		GridPane registrationGrid = new GridPane();
 		registrationGrid.setPadding(new Insets(10,10,10,10));
 		registrationGrid.setVgap(8);
 		registrationGrid.setHgap(10);
-
-		//create Buttons
+		
+		//create Buttons 
 		Button backButton = new Button ("Back");
 		Button reserveButton = new Button ("Reserve");
 		GridPane.setConstraints(backButton,0,10);
-		GridPane.setConstraints(reserveButton,2,10);
-
+		GridPane.setConstraints(reserveButton,2,10);	
+		
 		//Create labels
 		Label fromCityLabel= new Label("Flying From: ");
 		GridPane.setConstraints(fromCityLabel,0,0);
@@ -215,8 +198,8 @@ public class Tutorials extends Application {
 		GridPane.setConstraints(timeLabel,2,6);
 		Label errorPassenger = new Label ("Enter valid number of passengers");
 		Label errorDate = new Label ("Enter valid dates");
-
-		//create textfields and others
+		
+		//create textfields and others 
 		TextField fromCityTextfield = new TextField();
 		fromCityTextfield.setPromptText("Enter Departing city");
 		GridPane.setConstraints(fromCityTextfield,0,1);
@@ -230,25 +213,25 @@ public class Tutorials extends Application {
 		TextField passengerNumberTextfield = new TextField();
 		passengerNumberTextfield.setPromptText("Number of Passengers");
 		GridPane.setConstraints(passengerNumberTextfield,0,7);
-
-
-		//creating a dropdown for time picker
+		
+		
+		//creating a dropdown for time picker 
 		ChoiceBox <String> timepicker = new ChoiceBox<>();
 		timepicker.getItems().addAll("None","4:00","8:00","12:00","16:00 (4:00 PM)","20:00 (8:00 PM)");
 		timepicker.setValue("None");
 		GridPane.setConstraints(timepicker,2,7);
-
+		
 		registrationGrid.getChildren().addAll(fromCityLabel,toCityLabel,dateFromLabel,
 												dateBackLabel,passengerNumberLabel,timeLabel,
 												fromCityTextfield,toCityTextfield,dateFromTextfield,
 												dateBackTextfield,passengerNumberTextfield,timepicker,
 												backButton,reserveButton);
-
+		
 		reserveButton.setOnAction(e -> {
 			try {
 				Integer.parseInt(passengerNumberTextfield.getText());
 				registrationGrid.getChildren().remove(errorPassenger);
-
+				
 			}catch(Exception ex) {
 				errorPassenger.setStyle("-fx-font-size: 5pt;"+
 										"-fx-text-fill: red;");
@@ -268,9 +251,9 @@ public class Tutorials extends Application {
 				registrationGrid.getChildren().add(errorDate);
 			}
 		});
-
+		
 		backButton.setOnAction(e->mainMenu());
-
+		
 		Scene scene = new Scene (registrationGrid,400,400);
 		window.setScene(scene);
 		window.show();
@@ -278,8 +261,8 @@ public class Tutorials extends Application {
 	private void registrationPage() {
 		//window = arg0;
 		window.setTitle("Registration Page");
-
-		//creating labels
+		
+		//creating labels 
 		Label firstNameLabel= new Label("First Name: ");
 		Label secondNameLabel= new Label("Second Name: ");
 		Label addressLabel1= new Label("Street Address 1: ");
@@ -291,7 +274,7 @@ public class Tutorials extends Application {
 		Label ssnLabel= new Label("Social Security Number: ");
 		Label usernameLabel= new Label("Username: ");
 		Label passwordLabel= new Label("Password: ");
-
+		
 		//creating textfields
 		TextField firstNameTextField= new TextField();
 		TextField secondNameTextField= new TextField();
@@ -307,20 +290,20 @@ public class Tutorials extends Application {
 		TextField passwordTextField= new TextField();
 		TextField securityQuestionTextField= new TextField();
 		securityQuestionTextField.setPromptText("Enter your answer to the security question here");
-
-		//creating a drop-down list
+		
+		//creating a drop-down list 
 		ChoiceBox<String> securityQuestions = new ChoiceBox<>();
 		securityQuestions.getItems().addAll("What was the house number and street name you lived in as a child?",
 											"What were the last four digits of your childhood telephone number?",
-											"What primary school did you attend?",
+											"What primary school did you attend?", 
 											"In what town or city was your first full time job?",
 											"In what town or city did you meet your spouse/partner?");
+			
 
-
-		//creating buttons
+		//creating buttons 
 		Button registerButton = new Button ("Register!");
 		Button backButton = new Button ("Back");
-
+		
 		//setting action to buttons
 		backButton.setOnAction(e-> {
 			try {
@@ -332,37 +315,19 @@ public class Tutorials extends Application {
 		});
 		registerButton.setOnAction(e-> {
 			//database code
-			String firstName = firstNameTextField.getText();
-			String secondName = secondNameTextField.getText();
-			String address = addressTextField1.getText();
-			String state = stateTextField.getText();
-			String zip= zipcodeTextField.getText();
-			String username = usernameTextField.getText();
-			String password = passwordTextField.getText();
-			String ssn = ssnTextField.getText();
-			String securityAnswer = securityQuestionTextField.getText();
-			String securityQuestion = securityQuestions.getSelectionModel().getSelectedItem();
-			try {
-				Connection con = getConnection();
-				PreparedStatement posted = con.prepareStatement("INSERT INTO customer (first, second, address, zip, state, username, password, ssn, securityqu, securityan) VALUES ('"+ firstName+ "','"+secondName+"','"+address+"','"+zip+"','"+state+"','"+username+"','"+password+"','"+ssn+"','"+securityQuestion+"', '"+securityAnswer+"')");
-				posted.executeUpdate();
-			}catch (Exception e1) {System.out.println(e1);}
-			finally {
-				System.out.println("Insert Completed.");
-				} 
 		});
-
-		//creating Vboxs and Hboxs to display data
+		
+		//creating Vboxs and Hboxs to display data 
 		//First vbox to contain all the other layouts
 		VBox mainVbox = new VBox();
-
+		
 		//creating Hbox for all the labels and textfields
 		HBox entryFields = new HBox();
 		entryFields.setPadding(new Insets(2,2,5,2));
 			//this hbox will contain two vboxs
 			VBox labels = new VBox(10);
 			labels.setAlignment(Pos.CENTER);
-				//adding labels to the vbox
+				//adding labels to the vbox 
 				labels.getChildren().addAll(firstNameLabel,secondNameLabel,addressLabel1,addressLabel2,cityLabel,
 						stateLabel,zipcodeLabel,emailLabel,ssnLabel,usernameLabel,passwordLabel);
 			VBox textFields = new VBox();
@@ -373,15 +338,15 @@ public class Tutorials extends Application {
 						usernameTextField,passwordTextField);
 			//add the two new created vboxs to hbox
 			entryFields.getChildren().addAll(labels,textFields);
-
-		//create another hbox for the buttons
+		
+		//create another hbox for the buttons 
 		HBox buttonsHbox = new HBox();
 		buttonsHbox.getChildren().addAll(backButton,registerButton);
 		buttonsHbox.setPadding(new Insets(5,2,2,2));
-
+				
 		//adding all the components together
 		mainVbox.getChildren().addAll(entryFields,securityQuestions,securityQuestionTextField, buttonsHbox);
-
+		
 		Scene scene = new Scene (mainVbox, 400,400);
 		window.setScene(scene);
 		window.show();
@@ -389,22 +354,22 @@ public class Tutorials extends Application {
 	private void loginPage() {
 		//window=arg0;
 		window.setTitle("Login Page");
-		//Create labels
+		//Create labels 
 		Label usernameLabel = new Label ("Username: ");
 		usernameLabel.setStyle("-fx-font-size: 12pt;");
 		Label passwordLabel = new Label ("Password: ");
 		passwordLabel.setStyle("-fx-font-size: 12pt;");
-
-		//Create textfield
+		
+		//Create textfield 
 		TextField usernameField = new TextField();
 		usernameField.setPromptText("Enter username here");
 		TextField passwordField = new TextField();
 		passwordField.setPromptText("Enter password here");
-
+		
 		//Create Button
 		Button loginButton = new Button("Login");
 		Button backButton = new Button("Back");
-
+		
 		//adding action to button
 		backButton.setOnAction(e -> {
 			try {
@@ -416,27 +381,9 @@ public class Tutorials extends Application {
 		});
 		loginButton.setOnAction(e->{
 			//database code
-			ResultSet rs;
-		        String username = usernameField.getText();
-		        String password = passwordField.getText();
-
-		        String query = "SELECT * FROM customer WHERE username =? AND password =?";
-
-		        try {
-		        	Connection con = getConnection();
-		        	PreparedStatement posted = con.prepareStatement(query);
-
-		            posted.setString(1, username);
-		            posted.setString(2, password);
-
-		            rs = posted.executeQuery();
-		        } catch (Exception e1) {System.out.println(e1);}
-				finally {
-					System.out.println("Login Completed.");}
-		        });
 		});
-
-		//Creating panes
+		
+		//Creating panes 
 		GridPane pane = new GridPane();
 		//adding children to pane
 		pane.add(usernameLabel, 1, 1,2,1);
@@ -445,17 +392,17 @@ public class Tutorials extends Application {
 		pane.add(passwordField, 4, 4,2,1);
 		pane.add(loginButton, 5, 5);
 		pane.add(backButton, 4, 5);
-
+		
 		scene = new Scene(pane, 300,300);
 		window.setScene(scene);
 		window.show();
 	}
-
+	
 	private void mainMenu() {
 		//window =arg0;
 		window.setTitle("Main Menu");
-
-		//Create two buttons ojects
+		
+		//Create two buttons ojects 
 		Button login = new Button("Login");
 		login.setOnAction(e -> loginPage());
 		Button register = new Button("Register");
@@ -473,32 +420,32 @@ public class Tutorials extends Application {
 				+ "-fx-font-size: 8pt;"
 				+ "-fx-text-fill: #000000;");
 		blank.setStyle("-fx-font-size: 4pt;");
-
+		
 		//creating menu bar
 		MenuBar menu = new MenuBar();
 		Menu home = new Menu("Home");
 		home.getItems().add(new MenuItem("Go Home"));
 		menu.getMenus().add(home);
 		menu.setStyle("-fx-background-color: #994C00;");
-
+		
 		//Create vbox for layout type
 		VBox pane = new VBox(20);
 		pane.setPadding(new Insets(10,10,10,10));
-		//customize the vbox
+		//customize the vbox 
 		pane.setAlignment(Pos.CENTER);
 		pane.getChildren().addAll(login,register,blank,recoverPassword);
 		pane.setStyle("-fx-background-color: #0080FF");
-
+		
 		//create border pane
 		BorderPane mainMenuBorderPane = new BorderPane();
 		mainMenuBorderPane.setTop(menu);
 		mainMenuBorderPane.setCenter(pane);
-
+		
 		//create new scene with vbox
 		scene= new Scene(mainMenuBorderPane,500,500);
 		window.setScene(scene);
 		window.show();
 	}
-
+	
 
 }
