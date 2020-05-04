@@ -20,7 +20,7 @@ public class Customer{
 	public static void createCustTable()throws Exception{
 		try{
 			Connection con = getConnection();
-			PreparedStatement create  = con.prepareStatement("CREATE TABLE IF NOT EXISTS customer(id int NOT NULL AUTO_INCREMENT, first varchar(255), last varchar(255), address varchar(255),zip int(5), state varchar(255), username varchar(255), password varchar(255), ssn varchar(11), securityqu varchar(255), securityan varchar(255) ,PRIMARY KEY(id))");
+			PreparedStatement create  = con.prepareStatement("CREATE TABLE IF NOT EXISTS customer(id int NOT NULL AUTO_INCREMENT, first varchar(255)NOT NULL, last varchar(255)NOT NULL, address varchar(255)NOT NULL,zip varchar(5)NOT NULL, state varchar(255)NOT NULL, username varchar(255)NOT NULL, password varchar(255)NOT NULL, ssn varchar(11)NOT NULL, securityqu varchar(255)NOT NULL, securityan varchar(255)NOT NULL ,PRIMARY KEY(id))");
 			create.executeUpdate();
 
 		}catch(Exception e) {System.out.println(e);}
@@ -28,28 +28,28 @@ public class Customer{
 	}
 
 	//Inserts statements into customer table
-	public static void post() throws Exception{
-		String firstName = firstNameTextField.getText();
-		String secondName = secondNameTextField.getText();
-		String address = addressTextField1.getText();
-		String state = stateTextField.getText();
-		String zip= zipcodeTextField.getText();
-		String username = usernameTextField.getText();
-		String password = passwordTextField.getText();
-		String ssn = ssnTextField.getText();
-		String securityAnswer = securityQuestionTextField.getText();
-		String securityQuestion = securityQuestions.getSelectionModel().getSelectedItem();
+	String firstName = "Jane";
+String secondName = "Smith";
+String address = "Rose St";
+String state = "CA";
+String zip= "90012";
+String username = "jsmith";
+String password = "password";
+String ssn = "001-03-0010";
+String securityAnswer = "0001";
+String securityQuestion = "What were the last four digits of your childhood telephone number?";
 
-		try {
-			Connection con = getConnection();
-			PreparedStatement posted = con.prepareStatement("INSERT INTO customer (first, last, address, zip, state, username, password, ssn, securityqu, securityan) VALUES ('"+ firstName+ "','"+secondName+"','"+address+"','"+zip+"','"+state+"','"+username+"','"+password+"','"+ssn+"','"+securityQuestion+"', '"+securityAnswer+"')");
-			posted.executeUpdate();
-		}catch (Exception e) {System.out.println(e);}
-		finally {
-			System.out.println("Insert Completed.");
-		}
+try {
+	Connection con = getConnection();
+	PreparedStatement posted = con.prepareStatement("INSERT INTO customer (first, last, address, zip, state, username, password, ssn, securityqu, securityan) VALUES ('"+ firstName+ "','"+secondName+"','"+address+"','"+zip+"','"+state+"','"+username+"','"+password+"','"+ssn+"','"+securityQuestion+"', '"+securityAnswer+"')");
+	posted.executeUpdate();
+}catch (Exception e) {System.out.println(e);}
+finally {
+	System.out.println("Insert Completed.");
+}
 
-	}
+}
+
 
 	//Retrieves security question and answer for password recovery. Stores in array
 	public static ArrayList<String> getSecurityQandA() throws Exception {

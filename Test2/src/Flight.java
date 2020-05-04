@@ -16,7 +16,7 @@ public static void main(String[] args) throws Exception  {
 	public static void createFlightTable()throws Exception{
 		try{
 			Connection con = getConnection();
-			PreparedStatement create  = con.prepareStatement("CREATE TABLE IF NOT EXISTS flight(number varchar(255) NOT NULL, fromCity varchar(255), toCity varchar(255), date varchar(255),time varchar(5),PRIMARY KEY(number))");
+			PreparedStatement create  = con.prepareStatement("CREATE TABLE IF NOT EXISTS flight(number varchar(255) NOT NULL, fromCity varchar(255) NOT NULL, toCity varchar(255)NOT NULL, date varchar(255)NOT NULL,time varchar(5)NOT NULL, seats int,PRIMARY KEY(number))");
 			create.executeUpdate();
 
 		}catch(Exception e) {System.out.println(e);}
@@ -24,22 +24,23 @@ public static void main(String[] args) throws Exception  {
 	}
 
 	//Adds flight to flight table
-public static void postFlight() throws Exception{
-	String fromCity = fromCityTextfield.getText();
-	String toCity = toCityTextfield.getText();
-	String dateFrom = dateFromTextfield.getText();
-	String time = timepicker.getSelectionModel().getSelectedItem();
+	public static void postFlight() throws Exception{
+			final String fromCity = "DAL";
+			final String toCity = "ATL";
+			final String dateFrom = "2020-05-23";
+			final String time = "04:00";
 
-	try {
-			Connection con = getConnection();
-			PreparedStatement posted = con.prepareStatement("INSERT INTO flight (fromCity, toCity, date, time) VALUES ('"+ fromCity+ "','"+toCity+"','"+dateFrom+"','"+time+"')");
-			posted.executeUpdate();
-		}catch (Exception e) {System.out.println(e);}
-		finally {
-			System.out.println("Insert Completed.");
+				try {
+						Connection con = getConnection();
+						PreparedStatement posted = con.prepareStatement("INSERT INTO flight (fromCity, toCity, date, time) VALUES ('"+ fromCity+ "','"+toCity+"','"+dateFrom+"','"+time+"')");
+				posted.executeUpdate();
+			}catch (Exception e) {System.out.println(e);}
+			finally {
+				System.out.println("Insert Completed.");
+			}
+
 		}
-
-	}
+}
 
 
 	//establishes connection to database
