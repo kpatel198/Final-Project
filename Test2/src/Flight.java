@@ -16,25 +16,23 @@ public static void main(String[] args) throws Exception  {
 	public static void createFlightTable()throws Exception{
 		try{
 			Connection con = getConnection();
-			PreparedStatement create  = con.prepareStatement("CREATE TABLE IF NOT EXISTS flight(number int NOT NULL, fromCity varchar(255), toCity varchar(255), date date,time time, seats int,PRIMARY KEY(number))");
+			PreparedStatement create  = con.prepareStatement("CREATE TABLE IF NOT EXISTS flight(number varchar(255) NOT NULL, fromCity varchar(255), toCity varchar(255), date varchar(255),time varchar(5),PRIMARY KEY(number))");
 			create.executeUpdate();
 
 		}catch(Exception e) {System.out.println(e);}
 		finally {System.out.println("Table created.");}
 	}
 
-	//Inserts statements into flight table **NEEDS TO COME FROM GUI
+	//Adds flight to flight table
 public static void postFlight() throws Exception{
-	final String VAR1 = number.getText();
-	final String VAR2 = toCity.getText();
-	final String VAR3 = fromCity.getText();
-	final String VAR4 = date.getText();
-	final String VAR5 = time.getText();
-	final String VAR6 = seats.getText();
+	String fromCity = fromCityTextfield.getText();
+	String toCity = toCityTextfield.getText();
+	String dateFrom = dateFromTextfield.getText();
+	String time = timepicker.getSelectionModel().getSelectedItem();
 
 	try {
 			Connection con = getConnection();
-			PreparedStatement posted = con.prepareStatement("INSERT INTO flight (number, fromCity, toCity, date, time, seats) VALUES ('"+ VAR1+ "','"+VAR2+"','"+VAR3+"','"+VAR4+"','"+VAR5+"','"+VAR6+"')");
+			PreparedStatement posted = con.prepareStatement("INSERT INTO flight (fromCity, toCity, date, time) VALUES ('"+ fromCity+ "','"+toCity+"','"+dateFrom+"','"+time+"')");
 			posted.executeUpdate();
 		}catch (Exception e) {System.out.println(e);}
 		finally {

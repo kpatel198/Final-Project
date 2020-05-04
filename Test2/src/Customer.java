@@ -27,22 +27,22 @@ public class Customer{
 		finally {System.out.println("Table created.");}
 	}
 
-	//Inserts statements into customer table **NEEDS TO COME FROM TEXT FIELD
+	//Inserts statements into customer table
 	public static void post() throws Exception{
-		final String VAR1 = firstName.getText();
-		final String VAR2 = secondName.getText();
-		final String VAR3 = address.getText();
-		final String VAR4 = address.getText();
-		final String VAR5 = city.getText();
-		final String VAR6 = state.getText();
-		final String VAR7 = zipcode.getText();
-		final String VAR8 = username.getText();
-		final String VAR9 = password.getText();
-		final String VAR10 = ssn.getText();
+		String firstName = firstNameTextField.getText();
+		String secondName = secondNameTextField.getText();
+		String address = addressTextField1.getText();
+		String state = stateTextField.getText();
+		String zip= zipcodeTextField.getText();
+		String username = usernameTextField.getText();
+		String password = passwordTextField.getText();
+		String ssn = ssnTextField.getText();
+		String securityAnswer = securityQuestionTextField.getText();
+		String securityQuestion = securityQuestions.getSelectionModel().getSelectedItem();
 
 		try {
 			Connection con = getConnection();
-			PreparedStatement posted = con.prepareStatement("INSERT INTO customer (first, last, address, zip, state, username, password, ssn) VALUES ('"+ VAR1+ "','"+VAR2+"','"+VAR3+"','"+VAR4+"','"+VAR5+"','"+VAR6+"','"+VAR7+"','"+VAR8+"','"+VAR9+"','"+VAR10+"')");
+			PreparedStatement posted = con.prepareStatement("INSERT INTO customer (first, last, address, zip, state, username, password, ssn, securityqu, securityan) VALUES ('"+ firstName+ "','"+secondName+"','"+address+"','"+zip+"','"+state+"','"+username+"','"+password+"','"+ssn+"','"+securityQuestion+"', '"+securityAnswer+"')");
 			posted.executeUpdate();
 		}catch (Exception e) {System.out.println(e);}
 		finally {
@@ -55,7 +55,7 @@ public class Customer{
 	public static ArrayList<String> getSecurityQandA() throws Exception {
 		try {
 			Connection con = getConnection();
-			PreparedStatement recover = con.prepareStatement("SELECT securityqu, securityans FROM customer WHERE username = username.getText()");
+			PreparedStatement recover = con.prepareStatement("SELECT securityqu, securityans FROM customer WHERE username like ?");
 
 			ResultSet result = recover.executeQuery();
 
