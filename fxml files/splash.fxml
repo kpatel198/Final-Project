@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="parent" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SplashController">
+   <effect>
+      <Bloom />
+   </effect>
+   <children>
+      <AnchorPane focusTraversable="true" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: purple; -fx-opacity: 90%;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="202.0" layoutY="168.0" prefHeight="172.0" prefWidth="576.0" text="CodingFlights.com" textFill="#000000f4">
+               <font>
+                  <Font size="61.0" />
+               </font>
+            </Label>
+            <Label layoutX="393.0" layoutY="340.0" text="Airline reservation system" textFill="#dbc5c5">
+               <font>
+                  <Font name="Corbel Light Italic" size="20.0" />
+               </font>
+            </Label>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </AnchorPane>
+   </children>
+</AnchorPane>
