@@ -1,4 +1,4 @@
 # Final-Project
 
-FXML file folders:  contains splash, login, and register. created using SceneBuilder. 
-Controllers for fxml files:
+
+The program runs from file class javaAppCIS.java located in test2/src folder
