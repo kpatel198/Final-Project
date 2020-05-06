@@ -29,6 +29,23 @@ public class Database {
 		
 	}
 	
+	public static void newCustomer() {
+		//adding database code from registration page 
+		//Problem: accessing all the variables, maybe just make them arguments 
+			
+	}
+	
+	public static void deleteCustomer() {
+		
+	}
+	
+	public static void addFlight() {
+		
+	}
+	
+	public static void delteFlight() {
+		
+	}
 	
 	
 	
